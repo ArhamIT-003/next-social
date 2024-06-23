@@ -1,23 +1,12 @@
 "use client";
 
+import { mobileMenuItems } from "@/data/component-data";
+import { ClerkLoaded, SignedIn, SignedOut } from "@clerk/nextjs";
 import Link from "next/link";
 import React, { Fragment, useState } from "react";
 
-interface MobileMenuType {
-  link: string;
-  name: string;
-}
-
 export default function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
-
-  const mobileMenuItems: MobileMenuType[] = [
-    { link: "/", name: "Homepage" },
-    { link: "/friends", name: "Friends" },
-    { link: "/stories", name: "Stories" },
-    { link: "/groups", name: "Groups" },
-    { link: "/login", name: "Login" },
-  ];
 
   return (
     <Fragment>
@@ -54,6 +43,36 @@ export default function MobileMenu() {
                 {menu.name}
               </Link>
             ))}
+
+            <ClerkLoaded>
+              <SignedIn>
+                <>
+                  <Link
+                    href="/notifications"
+                    className="text-lg font-normal antialiased"
+                  >
+                    Notifications
+                  </Link>
+                  <Link
+                    href="/peoples"
+                    className="text-lg font-normal antialiased"
+                  >
+                    Peoples
+                  </Link>
+                  <Link
+                    href="/messages"
+                    className="text-lg font-normal antialiased"
+                  >
+                    Messages
+                  </Link>
+                </>
+              </SignedIn>
+              <SignedOut>
+                <Link href="/login" className="text-lg font-normal antialiased">
+                  Login
+                </Link>
+              </SignedOut>
+            </ClerkLoaded>
           </div>
         )}
       </div>
