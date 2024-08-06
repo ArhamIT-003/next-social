@@ -100,9 +100,11 @@ export default function Navbar() {
         </div>
 
         {/* SMALL SCREENS */}
-        <div className="block md:hidden flex items-center gap-4">
-          <UserButton />
-          <MobileMenu />
+        <div className="block md:hidden">
+          <div className="flex items-center gap-4">
+            <UserButton />
+            <MobileMenu />
+          </div>
         </div>
       </div>
     </Fragment>

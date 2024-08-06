@@ -22,3 +22,16 @@ export const mobileMenuItems: MobileMenuType[] = [
   { link: "/stories", name: "Stories" },
   { link: "/groups", name: "Groups" },
 ];
+
+export const LeftMenuData: MenuItemsType[] = [
+  { link: "/my-post", name: "My Post", image: "/posts.png" },
+  { link: "/activity", name: "Activity", image: "/activity.png" },
+  { link: "/marketplace", name: "MarketPlace", image: "/market.png" },
+  { link: "/events", name: "Events", image: "/events.png" },
+  { link: "/albums", name: "Albums", image: "/albums.png" },
+  { link: "/videos", name: "Videos", image: "/videos.png" },
+  { link: "/news", name: "News", image: "/news.png" },
+  { link: "/course", name: "Courses", image: "/courses.png" },
+  { link: "/lists", name: "Lists", image: "/lists.png" },
+  { link: "/settings", name: "Settings", image: "/settings.png" },
+];
