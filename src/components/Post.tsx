@@ -2,8 +2,13 @@
 import Image from "next/image";
 import React, { Fragment, useState } from "react";
 import Comments from "./Comments";
+import { Post as PostTypes, User } from "@prisma/client";
 
-export default function Post() {
+type FeedTypes = PostTypes & { user: User } & {
+  likes: [{ userId: string }];
+} & { _count: { comments: number; likes: number } };
+
+export default function Post({ post }: { post: FeedTypes }) {
   const [openComment, setOpenComment] = useState(false);
   return (
     <Fragment>
@@ -12,13 +17,13 @@ export default function Post() {
         <div className="flex justify-between items-center">
           <div className="flex gap-4 items-center">
             <Image
-              src={"/noAvatar.png"}
+              src={post.user.avatar!}
               alt=""
               width={40}
               height={40}
               className="w-10 h-10 rounded-full"
             />
-            <span className="text-sm font-medium">Mike Ross</span>
+            <span className="text-sm font-medium">{post.user.username}</span>
           </div>
           <div className="cursor-pointer">
             <Image
@@ -34,23 +39,13 @@ export default function Post() {
         <div className="flex flex-col gap-6">
           <div className="w-full relative min-h-96">
             <Image
-              src={
-                "https://images.pexels.com/photos/19013702/pexels-photo-19013702/free-photo-of-curtain-hanging-from-a-window-on-a-building-facade.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-              }
+              src={post.img!}
               alt=""
               fill
               className="object-cover rounded-md"
             />
           </div>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident
-            dicta, ipsa ex voluptates neque omnis debitis quis, expedita tempore
-            voluptate nobis quam ducimus veritatis. Officiis, veniam repellat
-            ipsum enim, hic dolores odit cum provident magnam voluptatum eaque,
-            veritatis vel commodi ad aspernatur omnis? Cumque sit nam officia
-            possimus earum laboriosam quaerat nesciunt praesentium odio optio
-            aliquam, laborum minus perspiciatis molestiae dolores.
-          </p>
+          <p>{post.desc}</p>
         </div>
         {/* INTERACTIONS */}
         <div className="flex items-center justify-between lg:justify-center gap-4 flex-wrap my-4">
@@ -64,7 +59,9 @@ export default function Post() {
                 className="w-5 h-5"
               />
               <div className="w-[0.5px] h-4 bg-slate-400"></div>
-              <span className="text-xs md:text-sm">123 Likes</span>
+              <span className="text-xs md:text-sm">
+                {post._count.likes} Likes
+              </span>
             </div>
             <div
               className="bg-slate-100 p-2 rounded-lg flex gap-4 items-center cursor-pointer"
@@ -78,7 +75,9 @@ export default function Post() {
                 className="w-5 h-5"
               />
               <div className="w-[0.5px] h-4 bg-slate-400"></div>
-              <span className="text-xs md:text-sm">2 comments</span>
+              <span className="text-xs md:text-sm">
+                {post._count.comments} comments
+              </span>
             </div>
           </div>
           <div>

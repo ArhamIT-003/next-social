@@ -12,3 +12,12 @@ export interface MobileMenuType {
   link: string;
   name: string;
 }
+
+
+export interface UserInfoBtnProps {
+  userId: string;
+  currentUserId: string | null;
+  isUserBlocked: boolean;
+  isFollowing: boolean;
+  isFollowingRequestSend: boolean;
+}

@@ -1,10 +1,35 @@
 import Feeds from "@/components/Feeds";
 import LeftMenu from "@/components/Left-Menu";
 import RightMenu from "@/components/Right-Menu";
+import prisma from "@/lib/client";
 import Image from "next/image";
 import React, { Fragment } from "react";
 
-export default function SingleProfilePage() {
+export default async function SingleProfilePage({
+  params,
+}: {
+  params: { username: string };
+}) {
+  const username = decodeURIComponent(params.username);
+
+  const user = await prisma.user.findFirst({
+    where: { username },
+    include: {
+      _count: {
+        select: {
+          followers: true,
+          post: true,
+          followings: true,
+        },
+      },
+    },
+  });
+
+  console.log("Profile page -> ", user);
+
+  if (!user) {
+    return null;
+  }
   return (
     <Fragment>
       <div className="flex gap-6 pt-6">
@@ -16,37 +41,40 @@ export default function SingleProfilePage() {
             <div className="flex flex-col items-center justify-center">
               <div className="w-full h-48 relative">
                 <Image
-                  src={
-                    "https://images.pexels.com/photos/27300639/pexels-photo-27300639/free-photo-of-yol.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                  }
+                  src={user.cover || "/noCover.png"}
                   alt="avatar"
                   fill
                   className="rounded-lg object-cover"
                 />
                 <Image
-                  src={
-                    "https://images.pexels.com/photos/27364883/pexels-photo-27364883/free-photo-of-retratos-de-um-jovem-dancarino-e-influencer.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                  }
+                  src={user.avatar || "/noAvatar.png"}
                   alt="avatar"
                   width={128}
                   height={128}
                   className="w-32 h-32 cursor-pointer absolute -bottom-16 m-auto right-0 rounded-full left-0 object-cover ring-4 ring-white"
                 />
               </div>
-              <h1 className="mt-20 mb-4 text-2xl font-medium">Mike Ross</h1>
+              <h1 className="mt-20 mb-4 text-2xl font-medium">
+                {user.username}
+              </h1>
               <div className="flex justify-center items-center gap-6">
                 <div className="flex flex-col gap-1">
-                  <span className="font-semibold self-center text-sm">100</span>
+                  <span className="font-semibold self-center text-sm">
+                    {user?._count.post}
+                  </span>
                   <span className="font-semibold">All Posts</span>
                 </div>
                 <div className="flex flex-col gap-1">
                   <span className="font-semibold self-center text-sm">
-                    1.2k
+                    {user?._count.followers}
                   </span>
                   <span className="font-semibold">Followers</span>
                 </div>
                 <div className="flex flex-col gap-1">
-                  <span className="font-semibold self-center text-sm">100</span>
+                  <span className="font-semibold self-center text-sm">
+                    {" "}
+                    {user?._count.followings}
+                  </span>
                   <span className="font-semibold">Following</span>
                 </div>
               </div>
